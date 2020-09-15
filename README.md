@@ -2,8 +2,8 @@
 
 <hr>
 
-# [English](#beto---english)  
-# [Español](#beto---español)
+- ### [Español](#beto---español)
+- ### [English](#beto---english)  
 
 <hr>
 
