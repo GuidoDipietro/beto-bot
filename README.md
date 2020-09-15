@@ -1,5 +1,5 @@
-# [English](#beto-english)  
-# [Español](#beto-espanol)
+# [English](#beto---english)  
+# [Español](#beto---español)
 
 <hr>
 
