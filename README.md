@@ -1,5 +1,4 @@
-<div style="text-align: center;"><img src="imgs/pfp_small.png"></div>
-_Beto assistant_
+<img src="imgs/pfp_small.png">    _Beto assistant_
 
 <hr>
 
