@@ -1,6 +1,6 @@
-<img src="imgs/pfp_small.png">    _Beto assistant_  
+<img src="imgs/pfp_small.png">
 
-<img height=150 src="imgs/ping.PNG">
+<img height=100 src="imgs/ping.PNG">
 
 <hr>
 
