@@ -11,7 +11,7 @@
 
 <hr>
 
-Bot de Discord (privado) que puede recordar definiciones y fechas de exámenes, originalmente pensado para ayduarme a mí y a compañeros de estudio al momento de usar Discord para comunicarnos (y un poco para memear).  
+Bot de Discord privado para uso personal que puede recordar definiciones y fechas de exámenes, originalmente pensado para ayduarme a mí y a compañeros de estudio al momento de usar Discord para comunicarnos (y un poco para memear).  
 
 # Comandos y uso  
 Usando expresiones regulares _relajadas_ (o sea, nada formal, solo "pseudo expresiones" que transmiten la estructura del comando lo suficientemente bien).  
@@ -79,7 +79,7 @@ Dados todos los parámetros, Beto te va a decir la fecha almacenada con ```setfe
 
 <hr>
 
-Private Discord bot that remembers definitions and exam dates, thought to help myself and colleagues when using Discord as a main chatting channel for study purposes (and maybe some memeing too).
+Private Discord bot for personal use that remembers definitions and exam dates, thought to help myself and colleagues when using Discord as a main chatting channel for study purposes (and maybe some memeing too).
 
 # Commands and usage
 Using _relaxed_ RegExps. (That is, not formal RegExps, just some "pseudo" ones that convey the meaning of the command more directly). 
