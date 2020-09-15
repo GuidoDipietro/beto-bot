@@ -1,3 +1,8 @@
+<div style="text-align: center;"><img src="imgs/pfp_small.png"></div>
+_Beto assistant_
+
+<hr>
+
 # [English](#beto---english)  
 # [Español](#beto---español)
 
