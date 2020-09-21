@@ -138,8 +138,8 @@ These two commands modify information that is common for everyone.
 
 #### ``` beto agendate DD/MM examen? "event" "description"? ```  
 Meaning ```beto schedule DD/MM exam? "event" "description"```.  
-Beto will add to his DD/MM (any valid date) schedule whatever you name as "event" with an optinal "description".  
-If you include the keyword "examen" (exam) after the date, then this will be saved as an exam.  
+Beto will add to his ```DD/MM``` (any valid date) schedule whatever you name as ```"event"``` with an optional ```"description"```.  
+If you include the keyword ```"examen"``` (exam) after the date, then this will be saved as an exam.  
 
 ![](imgs/agendate_desc.PNG)
 ![](imgs/agendate_nodesc.PNG)
@@ -149,7 +149,7 @@ If you include the keyword "examen" (exam) after the date, then this will be sav
 
 #### ``` beto mes <num> completo? ```
 Meaning ```beto month <num> full?```.  
-Beto will show you all what he has on his schedule for the rest of the month, or for the full month if you tell him so using the keyword "completo".   
+Beto will show you all of his schedule for the rest of the month, or rather for the full month if you tell him so using the keyword ```completo```.   
 
 ![](imgs/mes_nada.PNG)
 ![](imgs/mes_entero.PNG)
