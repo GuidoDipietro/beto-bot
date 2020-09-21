@@ -74,6 +74,13 @@ Dados todos los parámetros, Beto te va a decir la fecha almacenada con ```setfe
 ![](imgs/getfecha.PNG)  
 ![](imgs/getfecha_recu.PNG)
 
+#### ``` beto regex REGEX PALABRA ```  
+Dada una expresión regular REGEX y una palabra PALABRA Beto te dice si anda o no.  
+Se pueden usar palabras de más de un token (o usar espacios en la palabra de prueba) usando comillas dobles.  
+
+![](imgs/regex_anda.PNG)  
+![](imgs/regex_noanda.PNG)
+
 <hr>
 <hr>
 
@@ -145,3 +152,10 @@ Given all those parameters, Beto will tell you what date you saved using ```setf
 
 ![](imgs/getfecha.PNG)  
 ![](imgs/getfecha_recu.PNG)
+
+#### ``` beto regex REGEX WORD ```  
+Given a regular expression REGEX and a word WORD, Beto will tell you if it's fully recognised or not.  
+You can use multi-token words if you enclose them in double quotes.  
+
+![](imgs/regex_anda.PNG)  
+![](imgs/regex_noanda.PNG)
