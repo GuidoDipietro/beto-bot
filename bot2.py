@@ -2,12 +2,16 @@
 ## Guido Dipietro | 2020 ##
 ###########################
 
+from aux_funcs import *
+
 from discord.ext.commands import Bot
 import random
 import re
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
+from unidecode import unidecode
+import datetime
 
 ##### FIREBASE #####
 
@@ -31,65 +35,11 @@ habilidades = {
 	"getfecha": "Se usa así: ```beto getfecha <recu>? <primero|segundo> <nombremateria>```",
 	"materias": "Las materias que tengo son estas: " + ", ".join(materias),
 	"acordate": 'Se usa así: ```beto acordate "algo" "definicion"``` con las comillas',
-	"contame": 'Se usa así: ```beto contame "cosa"``` con las comillas. Si querés saber qué sé sobre vos, decime ```beto contame todo```'
+	"contame": 'Se usa así: ```beto contame "cosa"``` con las comillas. Si querés saber qué sé sobre vos, decime ```beto contame todo```',
+	"regex": "Se usa así: ```beto regex REGEX PALABRA``` y yo te digo si la ER que pongas en REGEX anda con PALABRA.",
+	"agendate": 'Se usa así: ```beto agendate dd/mm <examen>? "nombreEvento" "descripción"?```',
+	"mes": "Se usa así: ```beto mes ([0-9] | 10 | 11 | 12)``` Te muestro todo lo que queda en el mes.\nO si querés todo lo del mes:```beto mes ([0-9] | 10 | 11 | 12) completo```"
 }
-
-##### AUX #####
-
-# starts with (string, list of strings)
-def starts(s, list):
-	return any([s.startswith(x) for x in list])
-
-# check if date is like dd/mm
-def proper_date(s):
-	match = re.search("[0-9]{1,2}/[0-9]{1,2}", s)
-	return False if (match is None) else match.group()==s
-
-# beto moment
-def bardear():
-	bardear = [
-		"¿Te quedaste sin nasta?",
-		"Tomate el palo.",
-		"Se te ven las caries desde acá",
-		"¿Quién te conoce?",
-		"Estás en otras ligas, rubio.",
-		"Pronóstico: TORMENTA de facha."
-	]
-	return random.choice(bardear)
-
-def check_instancia(instancia):
-	if instancia in ["primero","primer","1ero","1er","1"]: return 0
-	elif instancia in ["segundo","2do","2"]: return 1
-	return instancia
-
-# Save date to Firebase + return msg (sent on command function)
-# Excuse the Spanglish
-def save_fecha(inst, mat, fecha, recu=False):
-	recuOrNot = "parcial" if (not recu) else "recu del parcial"
-	childRecu = "recus" if recu else "parciales"
-	inst = check_instancia(inst)
-	# If clean
-	if (inst in [0,1]) and (mat in parciales.keys()) and (proper_date(fecha)):
-		ref.child("fechas").child(childRecu).child(mat).update({
-			str(inst+1): fecha
-		})
-		return f"Altoke: {recuOrNot} num. #{inst+1} de {mat} el día {fecha}. Así quedamo."
-	# If dirty
-	else:
-		return habilidades["setfecha"]
-
-# Get date from Firebase + return msg (sent on command function)
-# Excuse the Spanglish x 2
-def retrieve_fecha(inst, mat, recu=False):
-	recuOrNot = "recu del " if recu else ""
-	childRecu = "recus" if recu else "parciales"
-	inst = check_instancia(inst)
-	fecha = ref.child("fechas").child(childRecu).child(mat).child(str(inst+1)).get()
-
-	if fecha is None:
-		return f"No hay ninguna fecha cargada para el {recuOrNot}parcial num. #{inst+1} de {mat}..."
-	else:
-		return f"La fecha del {recuOrNot}parcial num. #{inst+1} de {mat} es el día {fecha}."
 
 ##### DISCORD #####
 
@@ -99,21 +49,55 @@ client.remove_command("help") # to overwrite this command (read on)
 # ON MESSAGE #
 @client.event
 async def on_message(message):
-	txt = message.content.strip()
-	tks = txt.split()
+	txt = unidecode(message.content.strip()) # Remove trailing spaces + normalize string
 	# To prevent the dumb
 	if message.author == client.user:
 		return
 	# When ping (cheap solution!)
-	if "<@!752961387432509490>" in txt.split():
+	pings = ["<@!752961387432509490>","<@752961387432509490>"]
+	if any([x in txt.split() for x in pings]):
 		await message.channel.send(message.author.mention)
 	# When hi
-	if ("beto" in txt) and starts(txt, ["hola","buenas","como anda","como va","todo bien"]):
+	if has(txt, ["beto","betuski"]) and has(txt, [
+		"como andamo",
+		"hola",
+		"buenas",
+		"como anda",
+		"como va",
+		"todo bien",
+		"como andas",
+		"todo en orden"
+	]):
 		saludos = [
 			"Acá andamo",
-			"Re discretos hoy"
+			"Re discretos hoy",
+			"Todo en orden parcial?",
+			"Buenass...",
+			"Copiá y después hablamos."
 		]
+		random.seed()
 		await message.channel.send(random.choice(saludos))
+	# When thanks
+	if has(txt, ["beto","betuski"]) and has(txt, [
+		"genial",
+		"buenisimo",
+		"gracias",
+		"valeu",
+		"obrigado",
+		"thanks",
+		"ty",
+		"sos un capo",
+		"excelente",
+		"que capo"
+	]):
+		denada = [
+			"A la orden...!",
+			"No prob.",
+			"Para eso me pagan, querido.",
+			"Noo, gracias a vos"
+		]
+		random.seed()
+		await message.channel.send(random.choice(denada))
 	# To run commands afterwards
 	await client.process_commands(message)
 
@@ -128,38 +112,84 @@ async def help(ctx, arg=None):
 	if arg:
 		await ctx.send(habilidades[arg])
 	else:
-		await ctx.send(f"Funciones:\n{', '.join(habilidades.keys())}")
+		await ctx.send(f"Funciones: ```{', '.join(habilidades.keys())}```")
 		await ctx.send(f"Si querés ayuda con una función, decime: beto help <nombreFunc>. Y si no... {bardear()}")
 
-@client.command()
-# beto setfecha <recu>? <1ero|2do> <materia> <dd>/<mm>
-# Sets date for parcial or recu
-async def setfecha(ctx, arg1, arg2, arg3, arg4=None):
-	recu = False if arg1!="recu" else True
-	inst, mat, fecha = arg1, arg2, arg3
-	if recu and arg4:
-		inst, mat, fecha = arg2, arg3, arg4
-	if proper_date(fecha):
-		await ctx.send(save_fecha(inst, mat, fecha, recu=recu))
+@client.command(name="agendate")
+# beto agendate <dd>/<mm> <exam>? <event> <desc>?
+async def agendate(ctx, arg1, arg2, arg3=None, arg4=None):
+	if proper_date(arg1):
+		if unidecode(arg2).upper()=="EXAMEN":
+			date, event, desc = arg1, arg3, arg4
+			save_to_date(ref, date, event, desc, isexam=True)
+
+			devolucion = f'EXAMEN: ```"{event}"```'
+			if desc:
+				devolucion = f'EXAMEN: ```"{event}": {desc}```'
+		else:
+			date, event, desc = arg1, arg2, arg3
+			save_to_date(ref, date, event, desc, isexam=False)
+
+			devolucion = f'evento: ```"{event}"```'
+			if desc:
+				devolucion = f'evento: ```"{event}": {desc}```'
+
+		await ctx.send(f"Agendado para el día {date} el {devolucion}")
 	else:
-		await ctx.send("Le pifiaste en algo, master")
-		await ctx.send(habilidades["setfecha"])
+		await ctx.send(habilidades["agendate"])
 
 @client.command()
-# beto getfecha <recu>? <1ero|2do> <materia>
-# Retrieves date for parcial or recu
-async def getfecha(ctx, arg1, arg2, arg3=None):
-	recu = False if arg1!="recu" else True
-	inst, mat = arg1, arg2
-	if recu and arg3:
-		inst, mat = arg2, arg3
-	await ctx.send(retrieve_fecha(inst, mat, recu=recu))
+# beto mes <number> completo?
+# Returns events this month
+async def mes(ctx, month_n, completo=None):
+	if month_n in [str(x) for x in range(1,13)]: # Comparing strs instead of int to avoid silly bugs
+		start = str(datetime.datetime.today().day) if (completo is None) else "1"
+		rta = get_month(ref, month_n, start, "32")
+
+		if rta:
+			if completo:
+				await ctx.send("Todos los eventos del mes:")
+			else:
+				await ctx.send("Lo que queda del mes:")
+			await send_parsed_rta(ctx, rta, month_n)
+		else:
+			await ctx.send("Nada para ese mes.") # beto mes 10 no ANDA???
+	else:
+		await ctx.send("No existe ese mes XD")
+
+@client.command()
+# beto semana (completa|proxima)?
+# Returns events this week
+async def semana(ctx, completa=None):
+	today = datetime.datetime.today() + datetime.timedelta(days=2)
+	# Determine period (this week (ALL), this week (REMAINING), next week)
+	# Rest of the week
+	if completa is None:
+		start, end = today.day, (today.day-today.weekday()+6)
+		title = "Lo que queda de la semana:"
+	# Next week
+	elif unidecode(completa).upper() in ["PROXIMA","SIGUIENTE"]:
+		today = today + datetime.timedelta(days=7)
+		start, end = today.day, today.day+6
+		title = "Toda la semana que viene:"
+	# All of this week
+	else:
+		start = today.day - today.weekday()		# Closest past Monday
+		end = start + 6							# Closest future Sunday
+		title = "Toda la semana corriente:"
+
+	rta = get_month(ref, str(today.month), str(start), str(end))
+	if rta:
+		await ctx.send(title)
+		await send_parsed_rta(ctx, rta, today.month)
+	else:
+		await ctx.send("Nada para mostrar.")
 
 @client.command()
 # beto acordate "cosa" "defin"
 # Saves something to the DB with a string key
 async def acordate(ctx, cosa, defin):
-	cosa = cosa.upper()
+	cosa = unidecode(cosa).upper() # Normalize key (all caps and no tildes)
 	try:
 		ref.child("datazos").child(str(ctx.author.id)).update({
 			cosa: defin
@@ -184,12 +214,22 @@ async def contame(ctx, arg1):
 			await ctx.send('Para preguntarme sobre algo de eso, decime ```beto contame "cosa"```')
 	else:
 		try:
-			cosa = arg1.upper()
+			cosa = unidecode(arg1).upper()
 			defin = ref.child("datazos").child(str(ctx.author.id)).get()[cosa]
 			await ctx.send(cosa.capitalize()+":")
 			await ctx.send(f"```{defin}```")
 		except:
 			await ctx.send(habilidades["contame"])
+
+@client.command()
+# beto regex <regex> <testword>
+async def regex(ctx, reg, word):
+	await ctx.send(f"Probando ```REGEX: {reg}``` con ```TEST: {word}```")
+	match = re.search(reg, word)
+	if match and match.group()==word:
+		await ctx.send("Sip, anda.")
+	else:
+		await ctx.send("No anda, mi pana")
 
 ##### RUN #####
 

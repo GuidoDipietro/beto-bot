@@ -55,24 +55,28 @@ Estos comandos modifican información que es común para todos.
 
 <hr>
 
-#### ``` beto setfecha recu? (1|2) <materia> dd/mm ```  
-Beto va a agendar una fecha para una instancia de examen si le decís:
-- Si es un recuperatorio
-- Si es la primera o segunda instancia
-  - Sinónimos admitidos para 1: ```primero, primer, 1ero, 1er, 1```
-  - Sinónimos admitidos para 2: ```segundo, 2do, 2```
-- Nombre de la materia
-- Fecha en formado dd/mm (RegExp para la gente curiosa: ```[0-9]{1,2}/[0-9]{1,2}```)  
+#### ``` beto agendate DD/MM examen? "evento" "descripción"? ```  
+Beto se agenda para el día DD/MM (siendo DD/MM una fecha válida) lo que le digas como "evento", con una descripción opcional.  
+Si además incluís la palabra "examen" después de la fecha, se almacena como un examen.  
 
-![](imgs/setfecha.PNG)  
-![](imgs/setfecha_recu.PNG)
+![](imgs/agendate_desc.PNG)
+![](imgs/agendate_nodesc.PNG)
+![](imgs/agendate_examen_desc.PNG)
+![](imgs/agendate_examen_nodesc.PNG)
+![](imgs/agendate_help.PNG)
 
-#### ``` beto getfecha recu? (1|2) <materia> ```  
-Lo mismo que ```setfecha``` pero sin el parámetro de la fecha.  
-Dados todos los parámetros, Beto te va a decir la fecha almacenada con ```setfecha``` para esa instancia (si hay alguna).  
+#### ``` beto mes <num> completo? ```
+Beto te muestra todo lo que hay en los próximos días del mes, o el mes entero si le aclarás que lo haga con la palabra "completo".  
 
-![](imgs/getfecha.PNG)  
-![](imgs/getfecha_recu.PNG)
+![](imgs/mes_nada.PNG)
+![](imgs/mes_entero.PNG)
+![](imgs/mes_nohay.PNG)
+
+#### ``` beto semana (completa|proxima)? ```
+Beto te muestra lo que queda de la semana, o la semana entera, o la que viene entera, según lo que le digas.
+
+![](imgs/semana_completa_y_vacia.PNG)
+![](imgs/semana_proxima.PNG)
 
 #### ``` beto regex REGEX PALABRA ```  
 Dada una expresión regular REGEX y una palabra PALABRA Beto te dice si anda o no.  
@@ -132,26 +136,31 @@ These two commands modify information that is common for everyone.
 
 <hr>
 
-#### ``` beto setfecha recu? (1|2) <materia> dd/mm ```  
-```Recu``` is short for ```recuperatorio``` which means "make-up exam". Hopefully we won't use that keyword too often.  
-```Materia``` means ```subject```.  
-Beto will set a date for the exam if you tell him:  
-- Is it a make-up?
-- Is it the 1st or 2nd instance?
-  - Supported values for 1: ```primero, primer, 1ero, 1er, 1```
-  - Supported values for 2: ```segundo, 2do, 2```
-- Subject name
-- Date in dd/mm format (RegExp if you're curious: ```[0-9]{1,2}/[0-9]{1,2}```)  
+#### ``` beto agendate DD/MM examen? "event" "description"? ```  
+Meaning ```beto schedule DD/MM exam? "event" "description"```.  
+Beto will add to his DD/MM (any valid date) schedule whatever you name as "event" with an optinal "description".  
+If you include the keyword "examen" (exam) after the date, then this will be saved as an exam.  
 
-![](imgs/setfecha.PNG)  
-![](imgs/setfecha_recu.PNG)
+![](imgs/agendate_desc.PNG)
+![](imgs/agendate_nodesc.PNG)
+![](imgs/agendate_examen_desc.PNG)
+![](imgs/agendate_examen_nodesc.PNG)
+![](imgs/agendate_help.PNG)
 
-#### ``` beto getfecha recu? (1|2) <materia> ```  
-Same as ```setfecha``` but without the date as a parameter.  
-Given all those parameters, Beto will tell you what date you saved using ```setfecha``` (if any).  
+#### ``` beto mes <num> completo? ```
+Meaning ```beto month <num> full?```.  
+Beto will show you all what he has on his schedule for the rest of the month, or for the full month if you tell him so using the keyword "completo".   
 
-![](imgs/getfecha.PNG)  
-![](imgs/getfecha_recu.PNG)
+![](imgs/mes_nada.PNG)
+![](imgs/mes_entero.PNG)
+![](imgs/mes_nohay.PNG)
+
+#### ``` beto semana (completa|proxima)? ```
+Meaning ```beto week (full|next)?```.  
+Beto will display whatever is left for this week, or the whole week, or the next one, according to what you command.  
+
+![](imgs/semana_completa_y_vacia.PNG)
+![](imgs/semana_proxima.PNG)
 
 #### ``` beto regex REGEX WORD ```  
 Given a regular expression REGEX and a word WORD, Beto will tell you if it's fully recognised or not.  
