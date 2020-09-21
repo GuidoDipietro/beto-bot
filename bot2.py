@@ -23,22 +23,13 @@ ref = db.reference()
 
 ##### DICTS #####
 
-materias = [
-	"AM2",
-	"Fisica1",
-	"AdS",
-	"Paradigmas",
-	"Sintaxis"
-]
 habilidades = {
-	"setfecha": "Se usa así: ```beto setfecha <recu>? <primero|segundo> <nombremateria> dd/mm```",
-	"getfecha": "Se usa así: ```beto getfecha <recu>? <primero|segundo> <nombremateria>```",
-	"materias": "Las materias que tengo son estas: " + ", ".join(materias),
 	"acordate": 'Se usa así: ```beto acordate "algo" "definicion"``` con las comillas',
 	"contame": 'Se usa así: ```beto contame "cosa"``` con las comillas. Si querés saber qué sé sobre vos, decime ```beto contame todo```',
 	"regex": "Se usa así: ```beto regex REGEX PALABRA``` y yo te digo si la ER que pongas en REGEX anda con PALABRA.",
 	"agendate": 'Se usa así: ```beto agendate dd/mm <examen>? "nombreEvento" "descripción"?```',
-	"mes": "Se usa así: ```beto mes ([0-9] | 10 | 11 | 12)``` Te muestro todo lo que queda en el mes.\nO si querés todo lo del mes:```beto mes ([0-9] | 10 | 11 | 12) completo```"
+	"mes": "Se usa así: ```beto mes ([0-9] | 10 | 11 | 12)``` Te muestro todo lo que queda en el mes.\nO si querés todo lo del mes:```beto mes ([0-9] | 10 | 11 | 12) completo```",
+	"semana": "Se usa así: ```beto semana (próxima|entera)?``` Te muestro todo lo que queda en la semana, o en la semana entera, o en la próxima, según me digas."
 }
 
 ##### DISCORD #####
@@ -161,7 +152,7 @@ async def mes(ctx, month_n, completo=None):
 # beto semana (completa|proxima)?
 # Returns events this week
 async def semana(ctx, completa=None):
-	today = datetime.datetime.today() + datetime.timedelta(days=2)
+	today = datetime.datetime.today()
 	# Determine period (this week (ALL), this week (REMAINING), next week)
 	# Rest of the week
 	if completa is None:
