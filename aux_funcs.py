@@ -8,7 +8,7 @@ import datetime
 def has(s, list):
 	return any([x in s for x in list])
 
-# starts with (string, list of strings)
+# self explanatory, come on
 def starts(s, list):
 	return any([s.startswith(x) for x in list])
 

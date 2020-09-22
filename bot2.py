@@ -103,6 +103,7 @@ async def help(ctx, arg=None):
 	if arg:
 		await ctx.send(habilidades[arg])
 	else:
+		random.seed()
 		await ctx.send(f"Funciones: ```{', '.join(habilidades.keys())}```")
 		await ctx.send(f"Si querés ayuda con una función, decime: beto help <nombreFunc>. Y si no... {bardear()}")
 
