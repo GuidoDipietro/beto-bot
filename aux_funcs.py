@@ -8,11 +8,11 @@ import datetime
 def has(s, list):
 	return any([x in s for x in list])
 
-# starts with (string, list of strings)
+# self explanatory, come on
 def starts(s, list):
 	return any([s.startswith(x) for x in list])
 
-# check if date is like dd/mm and valid
+# check if date is like dd/mm and valid (no 31/2 kinda stuff)
 def proper_date(s):
 	days = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 	match = re.search("[0-9]{1,2}/[0-9]{1,2}", s)
