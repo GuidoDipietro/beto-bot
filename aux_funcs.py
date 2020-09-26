@@ -4,6 +4,16 @@ import datetime
 
 ##### AUX #####
 
+def random_emoji():
+	emojis = [
+	'😏','😎','🤯','🤑','🤬',
+	'🥶','👹','👺','👻','☠',
+	'👾','👽','💩','🐍','🦑',
+	'👁','👀','👅','👣','🦊'
+	]
+	random.seed()
+	return random.choice(emojis)
+
 # s has any of the words in list
 def has(s, list):
 	return any([x in s for x in list])
@@ -12,7 +22,7 @@ def has(s, list):
 def starts(s, list):
 	return any([s.startswith(x) for x in list])
 
-# check if date is like dd/mm and valid (no 31/2 kinda stuff)
+# check if date is like dd/mm and valid
 def proper_date(s):
 	days = [0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 	match = re.search("[0-9]{1,2}/[0-9]{1,2}", s)

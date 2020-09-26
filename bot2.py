@@ -47,6 +47,7 @@ async def on_message(message):
 	# When ping (cheap solution!)
 	pings = ["<@!752961387432509490>","<@752961387432509490>"]
 	if any([x in txt.split() for x in pings]):
+		await message.add_reaction(random_emoji())
 		await message.channel.send(message.author.mention)
 	# When hi
 	if has(txt, ["beto","betuski"]) and has(txt, [
@@ -67,6 +68,7 @@ async def on_message(message):
 			"Copiá y después hablamos."
 		]
 		random.seed()
+		await message.add_reaction('👋')
 		await message.channel.send(random.choice(saludos))
 	# When thanks
 	if has(txt, ["beto","betuski"]) and has(txt, [
@@ -88,6 +90,7 @@ async def on_message(message):
 			"Noo, gracias a vos"
 		]
 		random.seed()
+		await message.add_reaction('👌')
 		await message.channel.send(random.choice(denada))
 	# To run commands afterwards
 	await client.process_commands(message)
