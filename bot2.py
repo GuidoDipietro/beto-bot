@@ -4,6 +4,7 @@
 
 from aux_funcs import *
 
+import discord
 from discord.ext.commands import Bot
 import random
 import re
@@ -36,6 +37,12 @@ habilidades = {
 
 client = Bot(command_prefix='beto ')
 client.remove_command("help") # to overwrite this command (read on)
+
+@client.event
+async def on_ready():
+	await client.change_presence(\
+		activity=discord.Activity(\
+			type=discord.ActivityType.listening, name="Gauss"))
 
 # ON MESSAGE #
 @client.event
