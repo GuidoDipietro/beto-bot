@@ -40,9 +40,10 @@ Los parámetros ```cosa``` y ```definición``` tienen que estar entre comillas d
 ![](imgs/acordate.PNG)  
 ![](imgs/acordate_single_word.PNG)  
 
-#### ``` beto contame (todo|"<cosa>") ```  
+#### ``` beto contame (todo|"<cosa>") raw? ```  
 Si el mensaje es exactamente ```beto contame todo```, Beto te va a decir todo lo que vos le hayas enseñado con el comando ```acordate```.  
 De lo contrario, cambiá ```cosa``` por el nombre de la cosa que quieras saber (case insensitive), y Beto te va a dar la definición que vos le enseñaste.  
+Al incluir "raw", Beto te manda el mensaje como texto plano.  
 
 ![](imgs/contame_todo.PNG)  
 ![](imgs/contame_parameter.PNG)  
@@ -120,10 +121,11 @@ The parameters ```thing``` and ```definition``` should include the double quotes
 ![](imgs/acordate.PNG)  
 ![](imgs/acordate_single_word.PNG)  
 
-#### ``` beto contame (todo|"<thing>") ```  
+#### ``` beto contame (todo|"<thing>") raw? ```  
 Meaning ```beto tell me everything|"<thing>"```.  
 If the message is exactly ```"beto contame todo"```, Beto will spit the names of the facts that you have told him using the ```acordate``` command.  
 Otherwise, replace ```"thing"``` with the name of one of those facts and Beto will tell you the definition provided by you before.  
+Include the keyword "raw" to get the saved value as plain text.  
 
 ![](imgs/contame_todo.PNG)  
 ![](imgs/contame_parameter.PNG)  

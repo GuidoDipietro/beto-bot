@@ -55,10 +55,10 @@ async def on_message(message):
 	# When ping (cheap solution!)
 	pings = ["<@!752961387432509490>","<@752961387432509490>"]
 	if any([x in txt.split() for x in pings]):
-		await message.add_reaction(aux.random_emoji())
+		await message.add_reaction(auxf.random_emoji())
 		await message.channel.send(message.author.mention)
 	# When hi
-	if aux.has(txt, ["beto","betuski"]) and aux.has(txt, [
+	if auxf.has(txt, ["beto","betuski"]) and auxf.has(txt, [
 		"como andamo",
 		"hola",
 		"buenas",
@@ -79,7 +79,7 @@ async def on_message(message):
 		await message.add_reaction('👋')
 		await message.channel.send(random.choice(saludos))
 	# When thanks
-	if aux.has(txt, ["beto","betuski"]) and aux.has(txt, [
+	if auxf.has(txt, ["beto","betuski"]) and auxf.has(txt, [
 		"genial",
 		"buenisimo",
 		"gracias",
@@ -116,22 +116,22 @@ async def help(ctx, arg=None):
 	else:
 		random.seed()
 		await ctx.send(f"Funciones: ```{', '.join(habilidades.keys())}```")
-		await ctx.send(f"Si querés ayuda con una función, decime: beto help <nombreFunc>. Y si no... {aux.bardear()}")
+		await ctx.send(f"Si querés ayuda con una función, decime: beto help <nombreFunc>. Y si no... {auxf.bardear()}")
 
 @client.command(name="agendate")
 # beto agendate <dd>/<mm> <exam>? <event> <desc>?
 async def agendate(ctx, arg1, arg2, arg3=None, arg4=None):
-	if aux.proper_date(arg1):
+	if auxf.proper_date(arg1):
 		if unidecode(arg2).upper()=="EXAMEN":
 			date, event, desc = arg1, arg3, arg4
-			aux.save_to_date(ref, date, event, desc, isexam=True)
+			auxf.save_to_date(ref, date, event, desc, isexam=True)
 
 			devolucion = f'EXAMEN: ```"{event}"```'
 			if desc:
 				devolucion = f'EXAMEN: ```"{event}": {desc}```'
 		else:
 			date, event, desc = arg1, arg2, arg3
-			aux.save_to_date(ref, date, event, desc, isexam=False)
+			auxf.save_to_date(ref, date, event, desc, isexam=False)
 
 			devolucion = f'evento: ```"{event}"```'
 			if desc:
@@ -147,14 +147,14 @@ async def agendate(ctx, arg1, arg2, arg3=None, arg4=None):
 async def mes(ctx, month_n, completo=None):
 	if month_n in [str(x) for x in range(1,13)]: # Comparing strs instead of int to avoid silly bugs
 		start = str(datetime.datetime.today().day) if (completo is None) else "1"
-		rta = aux.get_month(ref, month_n, start, "32")
+		rta = auxf.get_month(ref, month_n, start, "32")
 
 		if rta:
 			if completo:
 				await ctx.send("Todos los eventos del mes:")
 			else:
 				await ctx.send("Lo que queda del mes:")
-			await aux.send_parsed_rta(ctx, rta, month_n)
+			await auxf.send_parsed_rta(ctx, rta, month_n)
 		else:
 			await ctx.send("Nada para ese mes.") # beto mes 10 no ANDA???
 	else:
@@ -181,10 +181,10 @@ async def semana(ctx, completa=None):
 		end = start + 6							# Closest future Sunday
 		title = "Toda la semana corriente:"
 
-	rta = aux.get_month(ref, str(today.month), str(start), str(end))
+	rta = auxf.get_month(ref, str(today.month), str(start), str(end))
 	if rta:
 		await ctx.send(title)
-		await aux.send_parsed_rta(ctx, rta, today.month)
+		await auxf.send_parsed_rta(ctx, rta, today.month)
 	else:
 		await ctx.send("Nada para mostrar.")
 
@@ -202,13 +202,13 @@ async def acordate(ctx, cosa, defin):
 		await ctx.send(habilidades["acordate"])
 
 @client.command()
-# beto contame <todo | "cosa">
+# beto contame <todo | "cosa"> raw
 # Retrieves something from the DB with a string key
-async def contame(ctx, arg1):
+async def contame(ctx, arg1, raw=None):
 	if arg1=="todo":
 		todo = ref.child("datazos").child(str(ctx.author.id)).get()
 		if todo is None:
-			await ctx.send(f"No me contaste nada todavía. {aux.bardear()}")
+			await ctx.send(f"No me contaste nada todavía. {auxf.bardear()}")
 			await ctx.send(f'Contame algo así: ```beto acordate "cosa" "definicion" (con las comillas)```')
 		else:
 			todo = ", ".join([x.capitalize() for x in todo.keys()])
@@ -220,7 +220,7 @@ async def contame(ctx, arg1):
 			cosa = unidecode(arg1).upper()
 			defin = ref.child("datazos").child(str(ctx.author.id)).get()[cosa]
 			await ctx.send(cosa.capitalize()+":")
-			await ctx.send(f"```{defin}```")
+			await ctx.send(f"{defin}") if raw else await ctx.send(f"```{defin}```")
 		except:
 			await ctx.send(habilidades["contame"])
 
