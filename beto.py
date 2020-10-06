@@ -163,6 +163,7 @@ async def mes(ctx, month_n, completo=None):
 @client.command()
 # beto semana (completa|proxima)?
 # Returns events this week
+# WEEKS START ON MONDAYS
 async def semana(ctx, completa=None):
 	today = datetime.datetime.today()
 	# Determine period (this week (ALL), this week (REMAINING), next week)
@@ -177,8 +178,8 @@ async def semana(ctx, completa=None):
 		title = "Toda la semana que viene:"
 	# All of this week
 	else:
-		start = today.day - today.weekday()		# Closest past Monday
-		end = start + 6							# Closest future Sunday
+		start = (today - datetime.timedelta(days=today.weekday())).day # Closest past Monday
+		end = start + 6	# Closest future Sunday
 		title = "Toda la semana corriente:"
 
 	rta = auxf.get_month(ref, str(today.month), str(start), str(end))
