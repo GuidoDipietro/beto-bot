@@ -173,7 +173,8 @@ async def semana(ctx, completa=None):
 		title = "Lo que queda de la semana:"
 	# Next week
 	elif unidecode(completa).upper() in ["PROXIMA","SIGUIENTE"]:
-		today = today + datetime.timedelta(days=7)
+		today = today + datetime.timedelta(days = 7 - today.weekday())
+		print(today)
 		start, end = today.day, today.day+6
 		title = "Toda la semana que viene:"
 	# All of this week
