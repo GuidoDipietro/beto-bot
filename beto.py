@@ -146,7 +146,9 @@ async def agendate(ctx, arg1, arg2, arg3=None, arg4=None):
 # Returns events this month
 async def mes(ctx, month_n, completo=None):
 	if month_n in [str(x) for x in range(1,13)]: # Comparing strs instead of int to avoid silly bugs
-		start = str(datetime.datetime.today().day) if (completo is None) else "1"
+		start = "1"
+		if (completo is None) and (month_n == datetime.datetime.today().month):
+			start = str(datetime.datetime.today().day)
 		rta = auxf.get_month(ref, month_n, start, "32")
 
 		if rta:
@@ -156,7 +158,7 @@ async def mes(ctx, month_n, completo=None):
 				await ctx.send("Lo que queda del mes:")
 			await auxf.send_parsed_rta(ctx, rta, month_n)
 		else:
-			await ctx.send("Nada para ese mes.") # beto mes 10 no ANDA???
+			await ctx.send("Nada para ese mes.")
 	else:
 		await ctx.send("No existe ese mes XD")
 
