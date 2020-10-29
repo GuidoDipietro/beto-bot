@@ -86,6 +86,9 @@ Se pueden usar palabras de más de un token (o usar espacios en la palabra de pr
 ![](imgs/regex_anda.PNG)  
 ![](imgs/regex_noanda.PNG)
 
+#### ``` beto wipecommands ```
+Elimina los mensajes que representan un comando de Beto. Para limpiar un poco el chat.
+
 <hr>
 <hr>
 
@@ -170,3 +173,6 @@ You can use multi-token words if you enclose them in double quotes.
 
 ![](imgs/regex_anda.PNG)  
 ![](imgs/regex_noanda.PNG)
+
+#### ``` beto wipecommands ```
+Deleted every message that triggered a Beto command. To tidy up stuff a bit.
