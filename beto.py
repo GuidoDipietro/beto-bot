@@ -107,7 +107,18 @@ async def on_message(message):
 ######### COMMANDS #########
 ############################
 
-@client.command()
+# Decorador para que guarde los IDs de los MSGs solamente
+# cuando son comandos (y que sigan siendo comandos!)
+def comando(func):
+	@client.command(name=func.__name__)
+	async def wrapper(ctx, *args, **kwargs):
+		# Save to DB to delete it if prompted to
+		auxf.save_msg_id(ref, ctx.message.id, ctx.message.author.id)
+		# Actually execute the command
+		await func(ctx, *args, **kwargs)
+	return wrapper
+
+@comando
 # beto help <funcname>?
 # Lists all functions, or lists func doc
 async def help(ctx, arg=None):
@@ -118,7 +129,7 @@ async def help(ctx, arg=None):
 		await ctx.send(f"Funciones: ```{', '.join(habilidades.keys())}```")
 		await ctx.send(f"Si querés ayuda con una función, decime: beto help <nombreFunc>. Y si no... {auxf.bardear()}")
 
-@client.command(name="agendate")
+@comando
 # beto agendate <dd>/<mm> <exam>? <event> <desc>?
 async def agendate(ctx, arg1, arg2, arg3=None, arg4=None):
 	if auxf.proper_date(arg1):
@@ -141,7 +152,7 @@ async def agendate(ctx, arg1, arg2, arg3=None, arg4=None):
 	else:
 		await ctx.send(habilidades["agendate"])
 
-@client.command()
+@comando
 # beto mes <number> completo?
 # Returns events this month
 async def mes(ctx, month_n, completo=None):
@@ -162,7 +173,7 @@ async def mes(ctx, month_n, completo=None):
 	else:
 		await ctx.send("No existe ese mes XD")
 
-@client.command()
+@comando
 # beto semana (completa|proxima)?
 # Returns events this week
 # WEEKS START ON MONDAYS
@@ -192,7 +203,7 @@ async def semana(ctx, completa=None):
 	else:
 		await ctx.send("Nada para mostrar.")
 
-@client.command()
+@comando
 # beto acordate "cosa" "defin"
 # Saves something to the DB with a string key
 async def acordate(ctx, cosa, defin):
@@ -205,7 +216,7 @@ async def acordate(ctx, cosa, defin):
 	except:
 		await ctx.send(habilidades["acordate"])
 
-@client.command()
+@comando
 # beto contame <todo | "cosa"> raw
 # Retrieves something from the DB with a string key
 async def contame(ctx, arg1, raw=None):
@@ -228,7 +239,7 @@ async def contame(ctx, arg1, raw=None):
 		except:
 			await ctx.send(habilidades["contame"])
 
-@client.command()
+@comando
 # beto regex <regex> <testword>
 async def regex(ctx, reg, word):
 	await ctx.send(f"Probando ```REGEX: {reg}``` con ```TEST: {word}```")
@@ -238,11 +249,16 @@ async def regex(ctx, reg, word):
 	else:
 		await ctx.send("No anda, mi pana")
 
+@comando
+# beto wipecommands
+async def wipecommands(ctx):
+	await auxf.wipe_msgs(ref, ctx)
+
 ##### RUN #####
 
-# Top-level security !!!!!
+# Top-level security !!!!!1
 with open("bot_key.txt","r+") as f:
 	botkey = f.read()
 
-keepalive.keepalive()
-client.run(botkey)
+keepalive.keepalive() 	# Para que no se cierre
+client.run(botkey)		# Run !

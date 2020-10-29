@@ -46,6 +46,21 @@ def bardear():
 	random.seed()
 	return random.choice(bardear)
 
+# Save message ID to the DB
+def save_msg_id(ref, id, user_id):
+	theChild = ref.child("MSGIDS").child(str(id))
+	if theChild:
+		theChild.update({ "author": user_id })
+# Deletes all messages based on the IDs in the DB
+# (Only IDs from msgs that triggered beto commands are stored here)
+async def wipe_msgs(ref, ctx):
+	all_ids = ref.child("MSGIDS").get()
+	for msgid in all_ids.keys():
+		msg = await ctx.channel.fetch_message(msgid)
+		await msg.add_reaction('😎')
+		await msg.delete()
+	ref.child("MSGIDS").set({})
+
 # Func used in "acordate" command
 def save_to_date(ref, date, event, desc, isexam=False):
 	d, m = date.split('/')
