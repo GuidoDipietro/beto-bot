@@ -19,7 +19,7 @@ import datetime
 
 cred = credentials.Certificate('firebase_adminsdk.json')
 firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://discord-bot-2ae41.firebaseio.com/'
+	'databaseURL': 'https://discord-bot-2ae41.firebaseio.com/'
 })
 ref = db.reference()
 
@@ -113,7 +113,12 @@ def comando(func):
 	@client.command(name=func.__name__)
 	async def wrapper(ctx, *args, **kwargs):
 		# Save to DB to delete it if prompted to
-		auxf.save_msg_id(ref, ctx.message.id, ctx.message.author.id)
+		auxf.save_msg_id(
+			ref,
+			_id=ctx.message.id,
+			channel=ctx.message.channel.id,
+			author=ctx.message.author.id
+			)
 		# Actually execute the command
 		await func(ctx, *args, **kwargs)
 	return wrapper
@@ -193,7 +198,7 @@ async def semana(ctx, completa=None):
 	# All of this week
 	else:
 		start = (today - datetime.timedelta(days=today.weekday())).day # Closest past Monday
-		end = start + 6	# Closest future Sunday
+		end = start + 6 # Closest future Sunday
 		title = "Toda la semana corriente:"
 
 	rta = auxf.get_month(ref, str(today.month), str(start), str(end))
@@ -260,5 +265,5 @@ async def wipecommands(ctx):
 with open("bot_key.txt","r+") as f:
 	botkey = f.read()
 
-keepalive.keepalive() 	# Para que no se cierre
-client.run(botkey)		# Run !
+keepalive.keepalive()   # Para que no se cierre
+client.run(botkey)      # Run !

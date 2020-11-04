@@ -6,10 +6,10 @@ import datetime
 
 def random_emoji():
 	emojis = [
-	'😏','😎','🤯','🤑','🤬',
-	'🥶','👹','👺','👻','☠',
-	'👾','👽','💩','🐍','🦑',
-	'👁','👀','👅','👣','🦊'
+		'😏','😎','🤯','🤑','🤬',
+		'🥶','👹','👺','👻','☠',
+		'👾','👽','💩','🐍','🦑',
+		'👁','👀','👅','👣','🦊'
 	]
 	random.seed()
 	return random.choice(emojis)
@@ -47,19 +47,26 @@ def bardear():
 	return random.choice(bardear)
 
 # Save message ID to the DB
-def save_msg_id(ref, id, user_id):
-	theChild = ref.child("MSGIDS").child(str(id))
+def save_msg_id(ref, _id, channel, author):
+	theChild = ref.child("MSGIDS").child(str(_id))
 	if theChild:
-		theChild.update({ "author": user_id })
+		theChild.update({
+			"channel": channel,
+			"author": author
+		})
+
 # Deletes all messages based on the IDs in the DB
 # (Only IDs from msgs that triggered beto commands are stored here)
 async def wipe_msgs(ref, ctx):
 	all_ids = ref.child("MSGIDS").get()
-	for msgid in all_ids.keys():
-		msg = await ctx.channel.fetch_message(msgid)
-		await msg.add_reaction('😎')
-		await msg.delete()
-	ref.child("MSGIDS").set({})
+	for msgid, data in all_ids.items():
+		if data["channel"]==ctx.channel.id:
+			msg = await ctx.channel.fetch_message(msgid)
+			await msg.add_reaction('😎')
+			await msg.delete()
+	ref.child("MSGIDS").set(
+		{ msgid: data for msgid,data in all_ids.items() if data["channel"]!=ctx.channel.id}
+	)
 
 # Func used in "acordate" command
 def save_to_date(ref, date, event, desc, isexam=False):
