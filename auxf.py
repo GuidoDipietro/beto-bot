@@ -134,18 +134,20 @@ async def send_parsed_rta(ctx, rta, month_n):
 			others = events["OTHERS"]
 			for other in others.items():
 				clean_others.append((date, other))
-	print(clean_exams, clean_others)
+	#print(clean_exams, clean_others)
 
+	month_names = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]
+	
 	# Build the EMBEDS
 	await trysend_embed(
 		ctx,
 		clean_exams,
-		title = f"EXÁMENES mes {month_n}",
+		title = "EXÁMENES " + month_names[int(month_n)-1],
 		colour = discord.Colour.red()
 	)
 	await trysend_embed(
 		ctx,
 		clean_others,
-		title = f"Otras cosas en mes {month_n}",
+		title = month_names[int(month_n)-1],
 		colour = discord.Colour.green()
 	)
