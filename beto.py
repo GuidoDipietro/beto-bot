@@ -52,6 +52,31 @@ async def on_message(message):
 	# To prevent the dumb
 	if message.author == client.user:
 		return
+
+	##### TESTING EMBEDS #####
+
+	# if txt.split()[0]=="pelao":
+	# 	embedVar = discord.Embed(
+	# 		title = "Testing Embeds",
+	# 		colour = discord.Colour.red(),
+	# 		description = "This is an Embed I'm using to test my face",
+	# 		footer = "What about a footer?",
+	# 	)
+	# 	embedVar.set_image(url="https://www.worldcubeassociation.org/uploads/user/avatar/2017TUNG13/1579536591.jpeg")
+	# 	embedVar.add_field(
+	# 		name="Field 1, not inline",
+	# 		value="Val 1",
+	# 		inline=False
+	# 	)
+	# 	embedVar.add_field(
+	# 		name="Field 2, YES inline",
+	# 		value="Val 2",
+	# 		inline=True
+	# 	)
+	# 	await message.channel.send(embed=embedVar)
+
+	######################################
+
 	# When ping (cheap solution!)
 	pings = ["<@!752961387432509490>","<@752961387432509490>"]
 	if any([x in txt.split() for x in pings]):

@@ -1,6 +1,7 @@
 import re
 import random
 import datetime
+import discord
 
 ##### AUX #####
 
@@ -97,7 +98,26 @@ def list_to_pretty_str(lista):
 
 	return out
 
-# Send data of EXAMS/OTHERS read from the DB as a single message
+# Yeets things in a list into an embed as fields
+def list_to_embed_field(embed, lista):
+	for thing in lista:
+		value = thing[1][0]
+		if thing[1][1]:
+			value += f"\n({thing[1][1]})"
+		embed.add_field(
+			name=thing[0],
+			value = value,
+			inline=False
+		)
+
+# Builds and sends the EMBED if list is not empty
+async def trysend_embed(ctx, lista, title="Embed", colour=discord.Colour.default()):
+	if len(lista)>0:
+		embed = discord.Embed(title = title, colour = colour)
+		list_to_embed_field(embed, lista)
+		await ctx.send(embed=embed)
+
+# Send data of EXAMS/OTHERS read from the DB as a single EMBED
 async def send_parsed_rta(ctx, rta, month_n):
 	clean_exams = []
 	clean_others = []
@@ -114,10 +134,18 @@ async def send_parsed_rta(ctx, rta, month_n):
 			others = events["OTHERS"]
 			for other in others.items():
 				clean_others.append((date, other))
-	out = ""
-	if len(clean_exams)>0:
-		out += f"----- EXÁMENES -----\n{list_to_pretty_str(clean_exams)}\n"
-	if len(clean_others)>0:
-		out += f"----- OTRAS COSAS -----\n{list_to_pretty_str(clean_others)}\n"
-	
-	await ctx.send(out)
+	print(clean_exams, clean_others)
+
+	# Build the EMBEDS
+	await trysend_embed(
+		ctx,
+		clean_exams,
+		title = f"EXÁMENES mes {month_n}",
+		colour = discord.Colour.red()
+	)
+	await trysend_embed(
+		ctx,
+		clean_others,
+		title = f"Otras cosas en mes {month_n}",
+		colour = discord.Colour.green()
+	)
