@@ -14,17 +14,17 @@ app = Flask('')
 def main():
   return "Henlo bro"
 
-@app.route(f'/{TOP_SECRET_ROUTE}/<msg>', methods=["GET"])
-def send_error_code_by_GET(msg):
+@app.route(f'/{TOP_SECRET_ROUTE}/<branch>/<hash>/<msg>', methods=["GET"])
+def send_error_code_by_GET(branch, hash, msg):
     errmsg = [
       "",
-      "Código de error #1 - Error en el test\n\n",
-      "Código de error #2 - Error de Valgrind (posible leak)\n\n",
+      "Código de error #1 - Error en el test",
+      "Código de error #2 - Error de Valgrind (posible leak)",
       "Código de error #3 - Error en la compilación (ver logs en GitHub)"
     ]
     errcolour = [
       discord.Colour.light_gray(),
-      discord.Colour.magenta(),
+      discord.Colour.orange(),
       discord.Colour.red(),
       discord.Colour.purple()
     ]
@@ -32,6 +32,7 @@ def send_error_code_by_GET(msg):
     
     webhook = Webhook.partial(WH_ID,TOP_SECRET_WH_TOKEN,adapter=RequestsWebhookAdapter())
     webhook.send("El reporte del tío Lucas:")
+    webhook.send(f"**({hash[:7]})** - branch **{branch}**")
 
     for error in errors:
       errcode, *filenames = error.split("*")
